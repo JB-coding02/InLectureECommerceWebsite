@@ -1,8 +1,8 @@
 using System.Diagnostics;
-using InLectureECommerceWebsite.Models;
+using ECommerce.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace InLectureECommerceWebsite.Controllers
+namespace ECommerce.Controllers
 {
     public class HomeController : Controller
     {
