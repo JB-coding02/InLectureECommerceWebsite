@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Product>;
+@{
+    ViewData["Title"] = "Product Listings";
+}
+
+<h2>Product Listing</h2>
+
+<a asp-action="Create" asp-controller="Product" class="btn btn-secondary">
+    Create Product
+</a>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Message"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+    </div>
+}
+
+@if (Model.Count() == 0)
+{
+    <p>No products are currently found</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(m => m.First().Title)</th>
+                <th>@Html.DisplayNameFor(m => m.First().Price)</th>
+                <th>Links</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Product product in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(p => product.Title)</td>
+                    <td>@Html.DisplayFor(p => product.Price)</td>
+                    <td>Update -- Delete</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
