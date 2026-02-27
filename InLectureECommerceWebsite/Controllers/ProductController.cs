@@ -26,7 +26,7 @@ public class ProductController : Controller
         return View(); 
     }
 
-    [HttpPost]
+    [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Product p)
     {
         if (ModelState.IsValid)
@@ -63,7 +63,7 @@ public class ProductController : Controller
         return View(product);
     }
 
-    [HttpPost]
+    [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(Product product)
     {
         if (ModelState.IsValid)
@@ -99,8 +99,7 @@ public class ProductController : Controller
         return View(product);
     }
 
-    [ActionName(nameof(Delete))]
-    [HttpPost]
+    [HttpPost, ActionName(nameof(Delete)), ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
         Product? product = await _context.Products.FindAsync(id);
