@@ -41,7 +41,10 @@ else
                         <a class="btn btn-primary" asp-controller="Product" 
                             asp-action="Edit" 
                             asp-route-id="@product.ProductId">Update</a>
-                        -- Delete
+
+                        <a class="btn btn-danger"asp-controller="Product"
+                            asp-action="Delete"
+                            asp-route-id="@product.ProductId">Delete</a>
                     </td>
                 </tr>
             }
