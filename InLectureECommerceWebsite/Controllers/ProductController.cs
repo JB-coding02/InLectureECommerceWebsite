@@ -57,13 +57,4 @@ public class ProductController : Controller
 
         return View(product);
     }
-
-    [HttpPost]
-    public async IActionResult Edit(Product p)
-    {
-        if (ModelState.IsValid)
-        {
-
-        }
-    }
 }
