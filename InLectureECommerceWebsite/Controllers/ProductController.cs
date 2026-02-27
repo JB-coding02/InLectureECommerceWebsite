@@ -81,7 +81,8 @@ public class ProductController : Controller
         return View(product);
     }
 
-    public IActionResult Delete(int id)
+    [HttpGet]
+    public async Task<IActionResult> Delete(int id)
     {
         // If user tried to go to the delete page without navigating on
         // our website
@@ -90,9 +91,7 @@ public class ProductController : Controller
             return BadRequest();
         }
 
-        Product? product = _context.Products
-            .Where(p => p.ProductId == id)
-            .FirstOrDefault();
+        Product? product = await _context.Products.FindAsync(id);
 
         if (product == null)
         {
