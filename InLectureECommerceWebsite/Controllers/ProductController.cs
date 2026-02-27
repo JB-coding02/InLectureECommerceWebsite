@@ -46,10 +46,13 @@ public class ProductController : Controller
     [HttpGet]
     public IActionResult Edit(int id)
     {
+        // If user tried to go to the delete page without navigating on
+        // our website
         if (id <= 0)
         {
             return BadRequest();
         }
+
         Product? product = _context.Products
             .Where(p => p.ProductId == id)
             .FirstOrDefault();
@@ -75,6 +78,27 @@ public class ProductController : Controller
 
             return RedirectToAction(nameof(Index));
         }
+        return View(product);
+    }
+
+    public IActionResult Delete(int id)
+    {
+        // If user tried to go to the delete page without navigating on
+        // our website
+        if (id <= 0)
+        {
+            return BadRequest();
+        }
+
+        Product? product = _context.Products
+            .Where(p => p.ProductId == id)
+            .FirstOrDefault();
+
+        if (product == null)
+        {
+            return NotFound();
+        }
+
         return View(product);
     }
 }
