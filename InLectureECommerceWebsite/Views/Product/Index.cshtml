@@ -37,7 +37,12 @@ else
                 <tr>
                     <td>@Html.DisplayFor(p => product.Title)</td>
                     <td>@Html.DisplayFor(p => product.Price)</td>
-                    <td>Update -- Delete</td>
+                    <td>
+                        <a class="btn btn-primary" asp-controller="Product" 
+                            asp-action="Edit" 
+                            asp-route-id="@product.ProductId">Update</a>
+                        -- Delete
+                    </td>
                 </tr>
             }
         </tbody>
