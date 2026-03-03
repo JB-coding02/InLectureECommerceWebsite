@@ -1,6 +1,7 @@
 ﻿using ECommerce.Data;
 using ECommerce.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce.Controllers;
 
@@ -44,5 +45,28 @@ public class MemberController : Controller
     public IActionResult Login()
     {
         return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Login(LoginViewModel login)
+    {
+        if (ModelState.IsValid)
+        {
+            Member? loggedInMember = await _context.Members
+                                .Where(m => (m.Username == login.UsernameOrEmail || m.Email == login.UsernameOrEmail)
+                                    && m.password == login.Password)
+                                .SingleOrDefaultAsync();
+
+            if (loggedInMember == null)
+            {
+                ModelState.AddModelError(string.Empty, "Your provided credentials do not match any records in our database.");
+                return View(login);
+            }
+
+            // Log the user in???
+
+            return RedirectToAction("Index", "Home");
+        }
+        return View(login);
     }
 }
