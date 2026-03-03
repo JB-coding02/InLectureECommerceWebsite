@@ -26,7 +26,7 @@ public class Member
     /// Email for the member
     /// </summary>
     
-    public required string email { get; set; }
+    public required string Email { get; set; }
 
     /// <summary>
     /// The member's password
