@@ -24,6 +24,26 @@ public class MemberController : Controller
     {
         if (ModelState.IsValid)
         {
+            bool usernameTaken = await _context.Members
+                                    .AnyAsync(m => m.Username == reg.Username);
+
+            if (usernameTaken)
+            {
+                ModelState.AddModelError(nameof(Member.Username), "Username already taken");
+            }
+
+            bool emailTaken = await _context.Members
+                                .AnyAsync(m => m.Email == reg.Email);
+
+            if (emailTaken)
+            {
+                ModelState.AddModelError(nameof(Member.Email), "Email already taken.");
+            }
+
+            if (usernameTaken || emailTaken)
+            {
+                return View(reg);
+            }
             // Map ViewModel to Member model tracked by DB
             Member newMember = new()
             {
