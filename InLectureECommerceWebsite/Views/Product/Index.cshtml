@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Product>;
+﻿@model ProductListViewModel
 @{
     ViewData["Title"] = "Product Listings";
 }
@@ -17,7 +17,7 @@
     </div>
 }
 
-@if (Model.Count() == 0)
+@if (!Model.Products.Any())
 {
     <p>No products are currently found</p>
 }
@@ -26,17 +26,17 @@ else
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>@Html.DisplayNameFor(m => m.First().Title)</th>
-                <th>@Html.DisplayNameFor(m => m.First().Price)</th>
+                <th>Title</th>
+                <th>Price</th>
                 <th>Links</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (Product product in Model)
+            @foreach (Product product in Model.Products)
             {
                 <tr>
-                    <td>@Html.DisplayFor(p => product.Title)</td>
-                    <td>@Html.DisplayFor(p => product.Price)</td>
+                    <td>@product.Title</td>
+                    <td>@product.Price.ToString("C")</td>
                     <td>
                         <a class="btn btn-primary" asp-controller="Product" 
                             asp-action="Edit" 
@@ -50,6 +50,32 @@ else
             }
         </tbody>
     </table>
+
+    <nav aria-label="Product pages">
+        <ul class="pagination">
+            <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+                <a class="page-link" asp-action="Index" asp-route-page="1">First</a>
+            </li>
+            <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+                <a class="page-link" asp-action="Index" asp-route-page="@(Model.CurrentPage - 1)">Previous</a>
+            </li>
+
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+                </li>
+            }
+
+            <li class="page-item @(Model.CurrentPage == Model.TotalPages || Model.TotalPages == 0 ? "disabled" : "")">
+                <a class="page-link" asp-action="Index" asp-route-page="@(Model.CurrentPage + 1)">Next</a>
+            </li>
+            <li class="page-item @(Model.CurrentPage == Model.TotalPages || Model.TotalPages == 0 ? "disabled" : "")">
+                <a class="page-link" asp-action="Index" asp-route-page="@Model.TotalPages">Last</a>
+            </li>
+        </ul>
+        <p>Page @Model.CurrentPage of @Model.TotalPages (Total Items: @Model.TotalItems)</p>
+    </nav>
 }
 
 

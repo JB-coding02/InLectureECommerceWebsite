@@ -17,8 +17,23 @@ html {
   min-height: 100%;
 }
 
+/* Use flexbox layout so footer stays at the bottom of the viewport. */
 body {
-  margin-bottom: 60px;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 20px;
+  padding-top: 20px;
+}
+
+/* Main content container should expand to fill available space above the footer. */
+body > .container {
+  flex: 1 0 auto;
+}
+
+footer.footer {
+  flex-shrink: 0;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
