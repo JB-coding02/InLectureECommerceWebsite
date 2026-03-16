@@ -14,21 +14,36 @@ public class ProductController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index(int page = 1)
+    public async Task<IActionResult> Index( string? searchTerm, decimal? minPrice, decimal? maxPrice, int page = 1)
     {
         const int productsPerPage = 3;
 
-        int totalProducts = await _context.Products.CountAsync();
+        // Start creating query, doesn't run yet.
+        IQueryable<Product> query = _context.Products;
+
+        // Apply filters
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            query = query.Where(p => p.Title.Contains(searchTerm));
+        }
+        if (minPrice.HasValue)
+        {
+            query = query.Where(p => p.Price >= minPrice.Value);
+        }
+        if (maxPrice.HasValue)
+        {
+            query = query.Where(p => p.Price <= maxPrice.Value);
+        }
+
+        int totalProducts = await query.CountAsync();
         int totalPagesNeeded = (int)Math.Ceiling(totalProducts / (double)productsPerPage);
 
-        if (page < 1) 
+        if (page < 1)
             page = 1;
-
-        // If user tries to navigate beyond last page, send them to the last page.
-        if (totalPagesNeeded > 0 && page > totalPagesNeeded) 
+        if (totalPagesNeeded > 0 && page > totalPagesNeeded)
             page = totalPagesNeeded;
 
-        List<Product> pagedProducts = await _context.Products
+        List<Product> pagedProducts = await query
             .OrderBy(p => p.Title)
             .Skip((page - 1) * productsPerPage)
             .Take(productsPerPage)
@@ -41,7 +56,10 @@ public class ProductController : Controller
             CurrentPage = page,
             TotalPages = totalPagesNeeded,
             ProductsPerPage = productsPerPage,
-            TotalItems = totalProducts
+            TotalItems = totalProducts,
+            ProductTitleSearch = searchTerm,
+            MinPrice = minPrice,
+            MaxPrice = maxPrice
         };
 
         return View(productListViewModel);
