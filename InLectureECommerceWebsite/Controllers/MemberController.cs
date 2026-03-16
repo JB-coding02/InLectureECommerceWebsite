@@ -72,11 +72,11 @@ public class MemberController : Controller
     {
         if (ModelState.IsValid)
         {
-            Member? loggedInMember = await _context.Members
-                                .Where(m => (m.Username == login.UsernameOrEmail || m.Email == login.UsernameOrEmail)
-                                    && m.password == login.Password)
-                                .SingleOrDefaultAsync();
-
+            var loggedInMember = await _context.Members
+                                    .Where(m => (m.Username == login.UsernameOrEmail || m.Email == login.UsernameOrEmail)
+                                        && m.password == login.Password)
+                                    .Select(m => new { m.Username, m.MemberId })
+                                    .SingleOrDefaultAsync();
             if (loggedInMember == null)
             {
                 ModelState.AddModelError(string.Empty, "Your provided credentials do not match any records in our database.");
